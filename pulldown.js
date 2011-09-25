@@ -36,6 +36,9 @@ Bubble.prototype.draw = function(context) {
         context.fillStyle = 'rgb(170, 255, 170)';
         context.fillRect(this.rect.x, this.rect.y, BUBBLE_SIZE, BUBBLE_SIZE);
     }
+    if (this.popSize * 2 >= BUBBLE_SIZE) {
+        return;
+    }
     context.drawImage(this.type.image,
             this.popSize, this.popSize,
             BUBBLE_SIZE - this.popSize * 2, BUBBLE_SIZE - this.popSize * 2,
