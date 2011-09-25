@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Pulldown!</title>
+        <script type="text/javascript" src="utils.js"></script>
+        <script type="text/javascript" src="pulldown.js"></script>
+        <style type="text/css">
+            canvas {
+                margin: 0 auto;
+                display: block;
+            }
+            #back-buffer {
+                display: none;
+            }
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
+    <body onload="init()">
+        <canvas id="game" width="800" height="600"></canvas>
+        <canvas id="back-buffer" width="800" height="600"></canvas>
+        <img id="background" class="hidden" src="background.gif" />
+
+        <img id="red" class="hidden" src="0.gif" />
+        <img id="turquoise" class="hidden" src="1.gif" />
+        <img id="green" class="hidden" src="2.gif" />
+        <img id="black" class="hidden" src="3.gif" />
+        <img id="yellow" class="hidden" src="4.gif" />
+        <img id="purple" class="hidden" src="5.gif" />
+    </body>
+</html>

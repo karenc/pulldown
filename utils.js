@@ -142,3 +142,14 @@ MoveAnimation.prototype.tick = function(dt) {
     }
     return true;
 };
+
+function multiCompletion(count, completion) {
+    if (completion === undefined) {
+        completion = function() {};
+    }
+    return function() {
+        if (--count === 0) {
+            completion();
+        }
+    };
+}
