@@ -4,12 +4,12 @@ var BUBBLE_SIZE = 34;
 var TICK_INTERVAL = Math.floor(1000 / 30);
 var GAME_AREA = new Rect(((450 - BUBBLE_SIZE * GAME_WIDTH) / 2), 45,
         BUBBLE_SIZE * GAME_WIDTH, BUBBLE_SIZE * GAME_HEIGHT);
-var SCORE_AREA = new Rect(GAME_AREA.x + GAME_AREA.width + 50, GAME_AREA.y,
-        300, 70);
-var TARGET_AREA = new Rect(GAME_AREA.x + GAME_AREA.width + 50,
-        SCORE_AREA.y + 100, 300, 70);
-var LEVEL_AREA = new Rect(GAME_AREA.x + GAME_AREA.width + 50,
-        TARGET_AREA.y + 100, 300, 70);
+var SCORE_AREA = new Rect(GAME_AREA.x - 5, GAME_AREA.y + GAME_AREA.height + 25,
+        GAME_AREA.width + 10, 50);
+var TARGET_AREA = new Rect(GAME_AREA.x - 5, SCORE_AREA.y + SCORE_AREA.height + 15,
+        GAME_AREA.width + 10, 50);
+var LEVEL_AREA = new Rect(GAME_AREA.x - 5, TARGET_AREA.y + TARGET_AREA.height + 15,
+        GAME_AREA.width + 10, 50);
 
 var DROP_SPEED = 1; // the smaller the faster
 var DROP_INTERVAL = 50; // the larger the faster
@@ -381,13 +381,13 @@ Score.prototype.draw = function(context) {
             SCORE_AREA.height);
     context.fillStyle = 'rgb(0, 0, 0)';
     context.font = 'bold 20px Arial';
-    context.fillText('Score', SCORE_AREA.x + 10, SCORE_AREA.y + 40);
+    context.fillText('Score', SCORE_AREA.x + 10, SCORE_AREA.y + 30);
 
     context.font = 'bold 40px Arial';
     context.fillStyle = 'rgb(0, 0, 0)';
     var score = this.pulldown.score.toString();
-    context.fillText(score, SCORE_AREA.x + (14 - score.length) * 20,
-            SCORE_AREA.y + 50);
+    context.fillText(score, SCORE_AREA.x + (16 - score.length) * 20,
+            SCORE_AREA.y + 40);
 };
 
 Score.prototype.hit = function(point) {
@@ -403,7 +403,7 @@ Target.prototype.draw = function(context) {
             TARGET_AREA.height);
     context.fillStyle = 'rgb(0, 0, 0)';
     context.font = 'bold 20px Arial';
-    context.fillText('Target', TARGET_AREA.x + 10, TARGET_AREA.y + 40);
+    context.fillText('Target', TARGET_AREA.x + 10, TARGET_AREA.y + 30);
 
     context.font = 'bold 40px Arial';
     if (this.pulldown.score < this.pulldown.target) {
@@ -412,8 +412,8 @@ Target.prototype.draw = function(context) {
         context.fillStyle = 'rgb(0, 0, 0)';
     }
     var target = this.pulldown.target.toString();
-    context.fillText(target, TARGET_AREA.x + (14 - target.length) * 20,
-            TARGET_AREA.y + 50);
+    context.fillText(target, TARGET_AREA.x + (16 - target.length) * 20,
+            TARGET_AREA.y + 40);
 };
 
 Target.prototype.hit = function(point) {
@@ -433,14 +433,14 @@ Level.prototype.draw = function(context) {
             LEVEL_AREA.height);
     context.fillStyle = 'rgb(0, 0, 0)';
     context.font = 'bold 20px Arial';
-    context.fillText('Level', LEVEL_AREA.x + 10, LEVEL_AREA.y + 40);
+    context.fillText('Level', LEVEL_AREA.x + 10, LEVEL_AREA.y + 30);
 
     context.font = 'bold 40px Arial';
     context.fillStyle = 'rgb(0, 0, 0)';
     var level = this.pulldown.level.toString();
     context.fillText(level,
-            LEVEL_AREA.x + (14 - level.length) * 20,
-            LEVEL_AREA.y + 50);
+            LEVEL_AREA.x + (16 - level.length) * 20,
+            LEVEL_AREA.y + 40);
 };
 
 Level.prototype.hit = function(context) {
