@@ -376,6 +376,10 @@ Score.prototype.draw = function(context) {
     context.fillStyle = 'rgb(100, 255, 100)';
     context.fillRect(SCORE_AREA.x, SCORE_AREA.y, SCORE_AREA.width,
             SCORE_AREA.height);
+    context.fillStyle = 'rgb(0, 0, 0)';
+    context.font = 'bold 20px Arial';
+    context.fillText('Score', SCORE_AREA.x + 10, SCORE_AREA.y + 40);
+
     context.font = 'bold 40px Arial';
     context.fillStyle = 'rgb(0, 0, 0)';
     var score = this.pulldown.score.toString();
@@ -394,6 +398,10 @@ Target.prototype.draw = function(context) {
     context.fillStyle = 'rgb(100, 255, 100)';
     context.fillRect(TARGET_AREA.x, TARGET_AREA.y, TARGET_AREA.width,
             TARGET_AREA.height);
+    context.fillStyle = 'rgb(0, 0, 0)';
+    context.font = 'bold 20px Arial';
+    context.fillText('Target', TARGET_AREA.x + 10, TARGET_AREA.y + 40);
+
     context.font = 'bold 40px Arial';
     if (this.pulldown.score < this.pulldown.target) {
         context.fillStyle = 'rgb(255, 0, 0)';
@@ -420,10 +428,15 @@ Level.prototype.draw = function(context) {
     context.fillStyle = 'rgb(100, 255, 100)';
     context.fillRect(LEVEL_AREA.x, LEVEL_AREA.y, LEVEL_AREA.width,
             LEVEL_AREA.height);
+    context.fillStyle = 'rgb(0, 0, 0)';
+    context.font = 'bold 20px Arial';
+    context.fillText('Level', LEVEL_AREA.x + 10, LEVEL_AREA.y + 40);
+
     context.font = 'bold 40px Arial';
     context.fillStyle = 'rgb(0, 0, 0)';
     var level = this.pulldown.level.toString();
-    context.fillText('Level ' + level, LEVEL_AREA.x + (8 - level.length) * 20,
+    context.fillText(level,
+            LEVEL_AREA.x + (14 - level.length) * 20,
             LEVEL_AREA.y + 50);
 };
 
