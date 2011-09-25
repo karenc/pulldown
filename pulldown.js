@@ -123,18 +123,42 @@ function BubbleType(image) {
     this.image = image;
 }
 
-function Pulldown(gameField, width, height, context) {
+function Pulldown(gameField, width, height, context, gameLayer) {
     this.gameField = gameField;
     this.width = width;
     this.height = height;
     this.context = context;
+    this.gameLayer = gameLayer;
+
     this.score = 0;
     this.finished = false;
+    this.level = 1;
+    this.target = 2000;
 
     for (var i = 0; i < width; i++) {
         this.gameField[i] = [];
     }
     this.matches = [];
+}
+
+Pulldown.prototype.nextTargetScore = function() {
+    if (this.level <= 2) {
+        this.target += 2000;
+    } else if (this.level >= 3 && this.level <= 5) {
+        this.target += 3000;
+    } else if (this.level >= 6 && this.level <= 8) {
+        this.target += 4000;
+    } else if (this.level >= 9 && this.level <= 13) {
+        this.target += 5000;
+    } else if (this.level >= 14 && this.level <= 31) {
+        this.target += 5500;
+    } else if (this.level >= 32 && this.level <= 63) {
+        this.target += 6000;
+    } else if (this.level >= 64 && this.level <= 95) {
+        this.target += 6500;
+    } else {
+        this.target += 7000;
+    }
 }
 
 Pulldown.prototype.addBubble = function(i, j, bubble) {
@@ -308,13 +332,10 @@ Pulldown.prototype.isFinished = function() {
     return;
 };
 
-function click(mouseEvent, gameLayer, pulldown) {
+function click(point, gameLayer, pulldown) {
     if (!allowClick) {
         return;
     }
-    var point = new Point(
-        mouseEvent.pageX - game.offsetLeft,
-        mouseEvent.pageY - game.offsetTop);
     if (GAME_AREA.containsPoint(point)) {
         var bubble = gameLayer.hit(point);
         pulldown.select(bubble);
@@ -342,6 +363,9 @@ Cursor.prototype.draw = function(context) {
     }
 };
 
+Cursor.prototype.hit = function(point) {
+};
+
 function Score(pulldown) {
     this.pulldown = pulldown;
 }
@@ -355,7 +379,10 @@ Score.prototype.draw = function(context) {
     var score = this.pulldown.score.toString();
     context.fillText(score, SCORE_AREA.x + (14 - score.length) * 20,
             SCORE_AREA.y + 50);
-}
+};
+
+Score.prototype.hit = function(point) {
+};
 
 function Target(pulldown) {
     this.pulldown = pulldown;
@@ -365,23 +392,88 @@ Target.prototype.draw = function(context) {
     context.fillStyle = 'rgb(0, 255, 0)';
     context.fillRect(TARGET_AREA.x, TARGET_AREA.y, TARGET_AREA.width,
             TARGET_AREA.height);
-}
+    context.font = 'bold 40px Arial';
+    if (this.pulldown.score < this.pulldown.target) {
+        context.fillStyle = 'rgb(255, 0, 0)';
+    } else {
+        context.fillStyle = 'rgb(0, 0, 0)';
+    }
+    var target = this.pulldown.target.toString();
+    context.fillText(target, TARGET_AREA.x + (14 - target.length) * 20,
+            TARGET_AREA.y + 50);
+};
+
+Target.prototype.hit = function(point) {
+};
 
 function GameFinished(pulldown) {
     this.pulldown = pulldown;
 }
 
 GameFinished.prototype.draw = function(context) {
+    var text;
     if (this.pulldown.finished) {
         context.fillStyle = 'rgba(0, 0, 0, 0.8)';
         context.fillRect(GAME_AREA.x, GAME_AREA.y, GAME_AREA.width,
                 GAME_AREA.height);
         context.fillStyle = 'rgb(255, 255, 255)';
         context.font = 'bold 40px Arial';
-        context.fillText('NEXT LEVEL', GAME_AREA.x + 50,
+        if (this.pulldown.score >= this.pulldown.target) {
+            text = 'NEXT LEVEL';
+        } else {
+            text = 'GAME OVER';
+        }
+        context.fillText(text, GAME_AREA.x + 50,
                 GAME_AREA.y + GAME_AREA.height / 2);
     }
+};
+
+GameFinished.prototype.hit = function(point) {
+    if (!GAME_AREA.containsPoint(point)) {
+        return;
+    }
+    if (this.pulldown.finished &&
+            this.pulldown.score >= this.pulldown.target) {
+        this.pulldown.nextLevel();
+    }
+};
+
+Pulldown.prototype.nextLevel = function() {
+    this.level++;
+    this.nextTargetScore();
+    this.gameLayer.gameObjects = [];
+    this.finished = false;
+    this.newGame();
 }
+
+Pulldown.prototype.newGame = function() {
+    var gameLayer = this.gameLayer;
+    function newBubble(i, j, bubble, completion) {
+        return function() {
+            dropNewBubble(gameLayer, bubble, i, j, completion);
+        };
+    }
+
+    function newBubbleFinished() {
+        allowClick = true;
+    }
+
+    var timeout = 0;
+    var bubble;
+    for (var j = GAME_HEIGHT - 1; j >= 0; j--) {
+        for (var i = 0; i < GAME_WIDTH; i++) {
+            bubble = randomBubble(i, j);
+            this.addBubble(i, j, bubble);
+            if (j == 0 && i == GAME_WIDTH - 1) {
+                setTimeout(newBubble(i, j, bubble, newBubbleFinished), timeout);
+            } else {
+                setTimeout(newBubble(i, j, bubble), timeout);
+            }
+            timeout += Math.max(100 - (GAME_HEIGHT - j) * DROP_INTERVAL, 5);
+        }
+    }
+
+};
 
 function init() {
     BubbleType.red = new BubbleType(document.getElementById('red'));
@@ -405,7 +497,8 @@ function init() {
     var gameLayer = new Layer();
     var topLayer = new Layer();
 
-    var pulldown = new Pulldown([], GAME_WIDTH, GAME_HEIGHT, context);
+    var pulldown = new Pulldown([], GAME_WIDTH, GAME_HEIGHT, context,
+            gameLayer);
 
     allowClick = false;
 
@@ -428,34 +521,15 @@ function init() {
     game.addEventListener('click',
             function(mouseEvent) {
                 mouseEvent.stopPropagation();
-                click(mouseEvent, gameLayer, pulldown);
+                var point = new Point(
+                    mouseEvent.pageX - game.offsetLeft,
+                    mouseEvent.pageY - game.offsetTop);
+                topLayer.hit(point);
+                click(point, gameLayer, pulldown);
                 redraw();
             }, true);
 
-    function newBubble(i, j, bubble, completion) {
-        return function() {
-            dropNewBubble(gameLayer, bubble, i, j, completion);
-        };
-    }
-
-    function newBubbleFinished() {
-        allowClick = true;
-    }
-
-    var timeout = 0;
-    var bubble;
-    for (var j = GAME_HEIGHT - 1; j >= 0; j--) {
-        for (var i = 0; i < GAME_WIDTH; i++) {
-            bubble = randomBubble(i, j);
-            pulldown.addBubble(i, j, bubble);
-            if (j == 0 && i == GAME_WIDTH - 1) {
-                setTimeout(newBubble(i, j, bubble, newBubbleFinished), timeout);
-            } else {
-                setTimeout(newBubble(i, j, bubble), timeout);
-            }
-            timeout += Math.max(100 - (GAME_HEIGHT - j) * DROP_INTERVAL, 5);
-        }
-    }
+    pulldown.newGame(gameLayer);
 
     topLayer.addGameObject(new Cursor(pulldown));
     topLayer.addGameObject(new Score(pulldown));
