@@ -43,7 +43,7 @@ Layer.prototype.removeObject = function(obj) {
     if (idx !== -1) {
         this.gameObjects.splice(idx, 1);
     }
-}
+};
 
 Layer.prototype.removeObjects = function(objs) {
     for (var i = 0; i < objs.length; i++) {
