@@ -9,9 +9,9 @@ var SCORE_AREA = new Rect(GAME_AREA.x + GAME_AREA.width + 50, GAME_AREA.y,
 var TARGET_AREA = new Rect(GAME_AREA.x + GAME_AREA.width + 50,
         GAME_AREA.y + SCORE_AREA.height + 50, 300, 70);
 
-var DROP_SPEED = 0.5; // the smaller the faster
-var DROP_INTERVAL = 100; // the larger the faster
-var POP_SPEED = 5; // the larger the faster
+var DROP_SPEED = 1; // the smaller the faster
+var DROP_INTERVAL = 50; // the larger the faster
+var POP_SPEED = 3; // the larger the faster
 var GRAVITY_SPEED = 0.1; // the smaller the faster
 var MINIMUM_MATCH = 3;
 
@@ -42,9 +42,9 @@ Bubble.prototype.draw = function(context) {
             this.rect.height - this.popSize * 2);
 };
 
-Bubble.prototype.pop = function(context) {
+Bubble.prototype.pop = function(context, completion) {
     this.match = false;
-    tickManager.addAnimation(new BubblePopAnimation(this));
+    tickManager.addAnimation(new BubblePopAnimation(this), completion);
 }
 
 Bubble.prototype.hit = function(point) {
@@ -159,14 +159,17 @@ Pulldown.prototype.addScore = function() {
 }
 
 Pulldown.prototype.pop = function() {
+    var this_ = this;
+    var completion = multiCompletion(this.matches.length, function() {
+        this_.addScore();
+        this_.gravity();
+        this_.clearMatches();
+        this_.isFinished();
+    });
     for (var i = 0; i < this.matches.length; i++) {
-        this.matches[i].pop(this.context);
+        this.matches[i].pop(this.context, completion);
         this.matches[i].dead = true;
     }
-    this.addScore();
-    this.gravity();
-    this.clearMatches();
-    this.isFinished();
 }
 
 Pulldown.prototype.select = function(bubble) {
@@ -289,13 +292,14 @@ Pulldown.prototype.gravity = function() {
 Pulldown.prototype.isFinished = function() {
     for (var i = 0; i < this.gameField.length; i++) {
         for (var j = 0; j < this.gameField[i].length; j++) {
-            if (this.gameField[i][j] !== null) {
+            if (this.gameField[i][j] !== null && !this.gameField[i][j].dead) {
                 this.floodFill(i, j, this.gameField[i][j]);
                 if (this.matches.length >= MINIMUM_MATCH) {
                     this.finished = false;
                     this.clearMatches();
                     return;
                 }
+                this.clearMatches();
             }
         }
     }
@@ -369,12 +373,12 @@ function GameFinished(pulldown) {
 
 GameFinished.prototype.draw = function(context) {
     if (this.pulldown.finished) {
-        context.fillStyle = 'rgba(0, 0, 0, 100)';
+        context.fillStyle = 'rgba(0, 0, 0, 0.8)';
         context.fillRect(GAME_AREA.x, GAME_AREA.y, GAME_AREA.width,
                 GAME_AREA.height);
         context.fillStyle = 'rgb(255, 255, 255)';
         context.font = 'bold 40px Arial';
-        context.fillText('NEXT LEVEL', GAME_AREA.x + GAME_AREA.width / 2 - 40,
+        context.fillText('NEXT LEVEL', GAME_AREA.x + 50,
                 GAME_AREA.y + GAME_AREA.height / 2);
     }
 }
@@ -456,6 +460,7 @@ function init() {
     topLayer.addGameObject(new Cursor(pulldown));
     topLayer.addGameObject(new Score(pulldown));
     topLayer.addGameObject(new Target(pulldown));
+    topLayer.addGameObject(new GameFinished(pulldown));
 
     redraw();
 }
