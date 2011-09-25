@@ -7,7 +7,9 @@ var GAME_AREA = new Rect(((450 - BUBBLE_SIZE * GAME_WIDTH) / 2), 45,
 var SCORE_AREA = new Rect(GAME_AREA.x + GAME_AREA.width + 50, GAME_AREA.y,
         300, 70);
 var TARGET_AREA = new Rect(GAME_AREA.x + GAME_AREA.width + 50,
-        GAME_AREA.y + SCORE_AREA.height + 50, 300, 70);
+        SCORE_AREA.y + 100, 300, 70);
+var LEVEL_AREA = new Rect(GAME_AREA.x + GAME_AREA.width + 50,
+        TARGET_AREA.y + 100, 300, 70);
 
 var DROP_SPEED = 1; // the smaller the faster
 var DROP_INTERVAL = 50; // the larger the faster
@@ -45,7 +47,7 @@ Bubble.prototype.draw = function(context) {
 Bubble.prototype.pop = function(context, completion) {
     this.match = false;
     tickManager.addAnimation(new BubblePopAnimation(this), completion);
-}
+};
 
 Bubble.prototype.hit = function(point) {
     if (!this.dead && this.rect.containsPoint(point)) {
@@ -87,7 +89,7 @@ Bubble.prototype.gravity = function(completion) {
     } else {
         gravityLeft();
     }
-}
+};
 
 function BubblePopAnimation(bubble) {
     this.bubble = bubble;
@@ -159,18 +161,18 @@ Pulldown.prototype.nextTargetScore = function() {
     } else {
         this.target += 7000;
     }
-}
+};
 
 Pulldown.prototype.addBubble = function(i, j, bubble) {
     this.gameField[i][j] = bubble;
-}
+};
 
 Pulldown.prototype.clearMatches = function() {
     for (var i = 0; i < this.matches.length; i++) {
         this.matches[i].match = false;
     }
     this.matches = [];
-}
+};
 
 Pulldown.prototype.addScore = function() {
     this.score += this.matches.length * 5 * this.matches.length;
@@ -180,7 +182,7 @@ Pulldown.prototype.addScore = function() {
     if (this.matches.length >= 20) {
         this.score += 500;
     }
-}
+};
 
 Pulldown.prototype.pop = function() {
     var this_ = this;
@@ -194,7 +196,7 @@ Pulldown.prototype.pop = function() {
         this.matches[i].pop(this.context, completion);
         this.matches[i].dead = true;
     }
-}
+};
 
 Pulldown.prototype.select = function(bubble) {
     if (!bubble) {
@@ -214,7 +216,7 @@ Pulldown.prototype.select = function(bubble) {
     if (this.matches.length < MINIMUM_MATCH) {
         this.clearMatches();
     }
-}
+};
 
 Pulldown.prototype.floodFill = function(i, j, match) {
     var directions = [
@@ -389,7 +391,7 @@ function Target(pulldown) {
 }
 
 Target.prototype.draw = function(context) {
-    context.fillStyle = 'rgb(0, 255, 0)';
+    context.fillStyle = 'rgb(100, 255, 100)';
     context.fillRect(TARGET_AREA.x, TARGET_AREA.y, TARGET_AREA.width,
             TARGET_AREA.height);
     context.font = 'bold 40px Arial';
@@ -409,6 +411,24 @@ Target.prototype.hit = function(point) {
 function GameFinished(pulldown) {
     this.pulldown = pulldown;
 }
+
+function Level(pulldown) {
+    this.pulldown = pulldown;
+}
+
+Level.prototype.draw = function(context) {
+    context.fillStyle = 'rgb(100, 255, 100)';
+    context.fillRect(LEVEL_AREA.x, LEVEL_AREA.y, LEVEL_AREA.width,
+            LEVEL_AREA.height);
+    context.font = 'bold 40px Arial';
+    context.fillStyle = 'rgb(0, 0, 0)';
+    var level = this.pulldown.level.toString();
+    context.fillText('Level ' + level, LEVEL_AREA.x + (8 - level.length) * 20,
+            LEVEL_AREA.y + 50);
+};
+
+Level.prototype.hit = function(context) {
+};
 
 GameFinished.prototype.draw = function(context) {
     var text;
@@ -444,7 +464,7 @@ Pulldown.prototype.nextLevel = function() {
     this.gameLayer.gameObjects = [];
     this.finished = false;
     this.newGame();
-}
+};
 
 Pulldown.prototype.newGame = function() {
     var gameLayer = this.gameLayer;
@@ -534,6 +554,7 @@ function init() {
     topLayer.addGameObject(new Cursor(pulldown));
     topLayer.addGameObject(new Score(pulldown));
     topLayer.addGameObject(new Target(pulldown));
+    topLayer.addGameObject(new Level(pulldown));
     topLayer.addGameObject(new GameFinished(pulldown));
 
     redraw();
