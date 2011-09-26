@@ -13,7 +13,7 @@ var LEVEL_AREA = new Rect(GAME_AREA.x - 5, TARGET_AREA.y + TARGET_AREA.height + 
 
 var DROP_SPEED = 1; // the smaller the faster
 var DROP_INTERVAL = 50; // the larger the faster
-var POP_SPEED = 3; // the larger the faster
+var POP_SPEED = 5; // the larger the faster
 var GRAVITY_SPEED = 0.1; // the smaller the faster
 var MINIMUM_MATCH = 3;
 
