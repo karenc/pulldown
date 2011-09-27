@@ -1,10 +1,10 @@
 var GAME_WIDTH = 10;
 var GAME_HEIGHT = 12;
-var BUBBLE_SIZE = 34;
+var BUBBLE_SIZE = 48;
 var TICK_INTERVAL = Math.floor(1000 / 30);
-var GAME_AREA = new Rect(((450 - BUBBLE_SIZE * GAME_WIDTH) / 2), 45,
+var GAME_AREA = new Rect(((480 - BUBBLE_SIZE * GAME_WIDTH) / 2), 0,
         BUBBLE_SIZE * GAME_WIDTH, BUBBLE_SIZE * GAME_HEIGHT);
-var SCORE_AREA = new Rect(GAME_AREA.x - 5, GAME_AREA.y + GAME_AREA.height + 25,
+var SCORE_AREA = new Rect(GAME_AREA.x - 5, GAME_AREA.y + GAME_AREA.height + 40,
         GAME_AREA.width + 10, 50);
 var TARGET_AREA = new Rect(GAME_AREA.x - 5, SCORE_AREA.y + SCORE_AREA.height + 15,
         GAME_AREA.width + 10, 50);
@@ -59,8 +59,8 @@ Bubble.prototype.hit = function(point) {
 };
 
 Bubble.prototype.getPosition = function() {
-    return [Math.floor(this.rect.x / BUBBLE_SIZE) - 1,
-           Math.floor(this.rect.y / BUBBLE_SIZE) - 1];
+    return [Math.floor((this.rect.x - GAME_AREA.x) / BUBBLE_SIZE),
+           Math.floor((this.rect.y - GAME_AREA.y) / BUBBLE_SIZE)];
 };
 
 Bubble.prototype.isSameType = function(bubble) {
