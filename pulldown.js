@@ -554,16 +554,30 @@ function init() {
 
     tickManager = new TickManager(redraw);
 
-    game.addEventListener('click',
-            function(mouseEvent) {
-                mouseEvent.stopPropagation();
-                var point = new Point(
-                    mouseEvent.pageX - game.offsetLeft,
-                    mouseEvent.pageY - game.offsetTop);
-                topLayer.hit(point);
-                click(point, gameLayer, pulldown);
-                redraw();
-            }, true);
+    if ('ontouchend' in document) {
+        // for mobile browsers
+        document.addEventListener('touchstart',
+                function(mouseEvent) {
+                    mouseEvent.stopPropagation();
+                    var point = new Point(
+                        mouseEvent.touches[0].pageX - game.offsetLeft,
+                        mouseEvent.touches[0].pageY - game.offsetTop);
+                    topLayer.hit(point);
+                    click(point, gameLayer, pulldown);
+                    redraw();
+                }, false);
+    } else {
+        document.addEventListener('mousedown',
+                function(mouseEvent) {
+                    mouseEvent.stopPropagation();
+                    var point = new Point(
+                        mouseEvent.pageX - game.offsetLeft,
+                        mouseEvent.pageY - game.offsetTop);
+                    topLayer.hit(point);
+                    click(point, gameLayer, pulldown);
+                    redraw();
+                }, false);
+    }
 
     pulldown.newGame(gameLayer);
 
@@ -574,4 +588,9 @@ function init() {
     topLayer.addGameObject(new GameFinished(pulldown));
 
     redraw();
+
+    // get rid of the address bar in android
+    if (navigator.userAgent.match(/Android/)) {
+        window.scrollTo(0, 1);
+    }
 }

@@ -1,9 +1,15 @@
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, height=device-height, target-densityDpi=device-dpi, user-scalable=no" />
         <title>Pulldown!</title>
         <script type="text/javascript" src="utils.js"></script>
         <script type="text/javascript" src="pulldown.js"></script>
         <style type="text/css">
+            body {
+                margin: 0;
+                border: 0;
+                padding: 0;
+            }
             canvas {
                 margin: 0 auto;
                 display: block;
@@ -18,8 +24,8 @@
         </style>
     </head>
     <body onload="init()">
-        <canvas id="game" width="450" height="800"></canvas>
-        <canvas id="back-buffer" width="450" height="800"></canvas>
+        <canvas id="game" width="480" height="800"></canvas>
+        <canvas id="back-buffer" width="480" height="800"></canvas>
         <img id="background" class="hidden" src="background.gif" />
 
         <img id="red" class="hidden" src="red.gif" />
