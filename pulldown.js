@@ -2,14 +2,6 @@ var GAME_WIDTH = 10;
 var GAME_HEIGHT = 12;
 var BUBBLE_SIZE = 48;
 var TICK_INTERVAL = Math.floor(1000 / 30);
-var GAME_AREA = new Rect(((480 - BUBBLE_SIZE * GAME_WIDTH) / 2), 0,
-        BUBBLE_SIZE * GAME_WIDTH, BUBBLE_SIZE * GAME_HEIGHT);
-var SCORE_AREA = new Rect(GAME_AREA.x - 5, GAME_AREA.y + GAME_AREA.height + 40,
-        GAME_AREA.width + 10, 50);
-var TARGET_AREA = new Rect(GAME_AREA.x - 5, SCORE_AREA.y + SCORE_AREA.height + 15,
-        GAME_AREA.width + 10, 50);
-var LEVEL_AREA = new Rect(GAME_AREA.x - 5, TARGET_AREA.y + TARGET_AREA.height + 15,
-        GAME_AREA.width + 10, 50);
 
 var DROP_SPEED = 1; // the smaller the faster
 var DROP_INTERVAL = 50; // the larger the faster
