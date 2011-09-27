@@ -459,7 +459,7 @@ GameFinished.prototype.draw = function(context) {
         } else {
             text = 'GAME OVER';
         }
-        context.fillText(text, GAME_AREA.x + 50,
+        context.fillText(text, GAME_AREA.x + (GAME_AREA.width / 2 - 120),
                 GAME_AREA.y + GAME_AREA.height / 2);
     }
 };
