@@ -368,7 +368,7 @@ function Score(pulldown) {
 }
 
 Score.prototype.draw = function(context) {
-    context.fillStyle = 'rgba(100, 255, 100, 0.5)';
+    context.fillStyle = SCORE_BACKGROUND;
     context.fillRect(SCORE_AREA.x, SCORE_AREA.y, SCORE_AREA.width,
             SCORE_AREA.height);
     context.fillStyle = 'rgb(0, 0, 0)';
@@ -390,7 +390,7 @@ function Target(pulldown) {
 }
 
 Target.prototype.draw = function(context) {
-    context.fillStyle = 'rgba(100, 255, 100, 0.5)';
+    context.fillStyle = SCORE_BACKGROUND;
     context.fillRect(TARGET_AREA.x, TARGET_AREA.y, TARGET_AREA.width,
             TARGET_AREA.height);
     context.fillStyle = 'rgb(0, 0, 0)';
@@ -420,7 +420,7 @@ function Level(pulldown) {
 }
 
 Level.prototype.draw = function(context) {
-    context.fillStyle = 'rgba(100, 255, 100, 0.5)';
+    context.fillStyle = SCORE_BACKGROUND;
     context.fillRect(LEVEL_AREA.x, LEVEL_AREA.y, LEVEL_AREA.width,
             LEVEL_AREA.height);
     context.fillStyle = 'rgb(0, 0, 0)';
@@ -585,4 +585,8 @@ function init() {
     if (navigator.userAgent.match(/Android/)) {
         window.scrollTo(0, 1);
     }
+
+    window.onbeforeunload = function(e) {
+        return '';
+    };
 }
