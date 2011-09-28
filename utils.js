@@ -46,19 +46,22 @@ Layer.prototype.removeObject = function(obj) {
 };
 
 Layer.prototype.removeObjects = function(objs) {
-    for (var i = 0; i < objs.length; i++) {
+    var i;
+    for (i = 0; i < objs.length; i++) {
         this.removeObject(objs[i]);
     }
 };
 
 Layer.prototype.draw = function(ctx) {
-    for (var i = 0; i < this.gameObjects.length; i++) {
+    var i;
+    for (i = 0; i < this.gameObjects.length; i++) {
         this.gameObjects[i].draw(ctx);
     }
 };
 
 Layer.prototype.hit = function(point) {
-    for (var i = 0; i < this.gameObjects.length; i++) {
+    var i;
+    for (i = 0; i < this.gameObjects.length; i++) {
         var hitObj = this.gameObjects[i].hit(point);
         if (hitObj) {
             return hitObj;
@@ -107,7 +110,8 @@ TickManager.prototype.addAnimation = function(anim, completion) {
 
 TickManager.prototype.tick = function(dt) {
     var deadAnimations = [];
-    for (var i = 0; i < this.animations.length; i++) {
+    var i;
+    for (i = 0; i < this.animations.length; i++) {
         if (!this.animations[i].anim.tick(dt)) {
             deadAnimations.push(i);
             this.animations[i].completion();
@@ -115,7 +119,7 @@ TickManager.prototype.tick = function(dt) {
     }
 
     while (deadAnimations.length > 0) {
-        var i = deadAnimations.pop();
+        i = deadAnimations.pop();
         this.animations.splice(i, 1);
     }
 

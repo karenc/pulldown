@@ -104,7 +104,7 @@ function dropNewBubble(layer, bubble, x, y, completion) {
 
     tickManager.addAnimation(new MoveAnimation(bubble,
                 new Point(bubble.rect.x, GAME_AREA.y + y * BUBBLE_SIZE),
-                y / BUBBLE_SIZE * DROP_SPEED), completion)
+                y / BUBBLE_SIZE * DROP_SPEED), completion);
 }
 
 function randomBubble(x, y) {
@@ -132,7 +132,8 @@ function Pulldown(gameField, width, height, context, gameLayer) {
     this.level = 1;
     this.target = 2000;
 
-    for (var i = 0; i < width; i++) {
+    var i;
+    for (i = 0; i < width; i++) {
         this.gameField[i] = [];
     }
     this.matches = [];
@@ -163,7 +164,8 @@ Pulldown.prototype.addBubble = function(i, j, bubble) {
 };
 
 Pulldown.prototype.clearMatches = function() {
-    for (var i = 0; i < this.matches.length; i++) {
+    var i;
+    for (i = 0; i < this.matches.length; i++) {
         this.matches[i].match = false;
     }
     this.matches = [];
@@ -187,7 +189,8 @@ Pulldown.prototype.pop = function() {
         this_.clearMatches();
         this_.isFinished();
     });
-    for (var i = 0; i < this.matches.length; i++) {
+    var i;
+    for (i = 0; i < this.matches.length; i++) {
         this.matches[i].pop(this.context, completion);
         this.matches[i].dead = true;
     }
@@ -227,13 +230,14 @@ Pulldown.prototype.floodFill = function(i, j, match) {
 
     var x;
     var y;
-    for (var k = 0; k < directions.length; k++) {
+    var k;
+    for (k = 0; k < directions.length; k++) {
         x = i + directions[k][0];
         y = j + directions[k][1];
         if (x >= 0 && x < this.width && y >= 0 && y < this.height &&
                 this.gameField[x][y] !== null) {
             if ((this.gameField[x][y].isSameType(match)) &&
-                    this.matches.indexOf(this.gameField[x][y]) == -1) {
+                    this.matches.indexOf(this.gameField[x][y]) === -1) {
                 this.matches.push(this.gameField[x][y]);
                 this.gameField[x][y].match = true;
                 this.floodFill(x, y, match);
@@ -247,15 +251,18 @@ Pulldown.prototype.gravity = function() {
     var move = [];
     var bubble;
     var dead;
-    for (var i = 0; i < this.width; i++) {
-        for (var j = this.height - 1; j >= 0; j--) {
+    var i;
+    var j;
+    var k;
+    for (i = 0; i < this.width; i++) {
+        for (j = this.height - 1; j >= 0; j--) {
             if (this.gameField[i][j] === null) {
                 break;
             }
             if (this.gameField[i][j].dead) {
                 this.gameField[i][j] = null;
                 dead = 1;
-                for (var k = j - 1; k >= 0; k--) {
+                for (k = j - 1; k >= 0; k--) {
                     bubble = this.gameField[i][k];
                     if (bubble === null) {
                         this.gameField[i][k + 1] = null;
@@ -282,15 +289,15 @@ Pulldown.prototype.gravity = function() {
 
     // Gravity Left
     var empty = 0;
-    for (var i = 0; i < this.width; i++) {
+    for (i = 0; i < this.width; i++) {
         if (this.gameField[i][this.height - 1] === null) {
             empty++;
         }
         if (empty > 0) {
-            for (var j = 0; j < this.height; j++) {
+            for (j = 0; j < this.height; j++) {
                 bubble = this.gameField[i][j];
                 if (bubble !== null) {
-                    bubble.dx = 0 - empty * BUBBLE_SIZE;
+                    bubble.dx = - empty * BUBBLE_SIZE;
                     this.gameField[i][j] = null;
                     this.gameField[i - empty][j] = bubble;
 
@@ -305,14 +312,16 @@ Pulldown.prototype.gravity = function() {
     var completion = multiCompletion(move.length, function() {
         allowClick = true;
     });
-    for (var i = 0; i < move.length; i++) {
+    for (i = 0; i < move.length; i++) {
         move[i].gravity(completion);
     }
 };
 
 Pulldown.prototype.isFinished = function() {
-    for (var i = 0; i < this.gameField.length; i++) {
-        for (var j = 0; j < this.gameField[i].length; j++) {
+    var i;
+    var j;
+    for (i = 0; i < this.gameField.length; i++) {
+        for (j = 0; j < this.gameField[i].length; j++) {
             if (this.gameField[i][j] !== null && !this.gameField[i][j].dead) {
                 this.floodFill(i, j, this.gameField[i][j]);
                 if (this.matches.length >= MINIMUM_MATCH) {
@@ -488,11 +497,13 @@ Pulldown.prototype.newGame = function() {
 
     var timeout = 0;
     var bubble;
-    for (var j = GAME_HEIGHT - 1; j >= 0; j--) {
-        for (var i = 0; i < GAME_WIDTH; i++) {
+    var i;
+    var j;
+    for (j = GAME_HEIGHT - 1; j >= 0; j--) {
+        for (i = 0; i < GAME_WIDTH; i++) {
             bubble = randomBubble(i, j);
             this.addBubble(i, j, bubble);
-            if (j == 0 && i == GAME_WIDTH - 1) {
+            if (j === 0 && i === GAME_WIDTH - 1) {
                 setTimeout(newBubble(i, j, bubble, newBubbleFinished), timeout);
             } else {
                 setTimeout(newBubble(i, j, bubble), timeout);
