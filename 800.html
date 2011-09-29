@@ -3,7 +3,8 @@
         <meta name="viewport" content="width=device-width, height=device-height, target-densityDpi=device-dpi, user-scalable=no" />
         <title>Pulldown!</title>
         <script type="text/javascript">
-            if (document.documentElement.clientWidth > document.documentElement.clientHeight) {
+            if ((window.innerWidth > window.innerHeight) &&
+                    !location.href.match(/'?redirect=no'/)) {
                 window.location.href = 'index.html';
             }
         </script>
