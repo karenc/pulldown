@@ -545,9 +545,11 @@ function init() {
         context.drawImage(background, 0, 0);
 
         context.save();
+        /* clipping is causing memory leak
         context.rect(GAME_AREA.x, GAME_AREA.y, GAME_AREA.width,
                 GAME_AREA.height);
         context.clip();
+        */
         gameLayer.draw(context);
         context.restore();
         topLayer.draw(context);
