@@ -172,13 +172,19 @@ Pulldown.prototype.clearMatches = function() {
 };
 
 Pulldown.prototype.addScore = function() {
-    this.score += this.matches.length * 5 * this.matches.length;
+    this.score += this.getScore();
+}
+
+Pulldown.prototype.getScore = function() {
+    var score = 0;
+    score += this.matches.length * 5 * this.matches.length;
     if (this.matches.length >= 10) {
-        this.score += 500;
+        score += 500;
     }
     if (this.matches.length >= 20) {
-        this.score += 500;
+        score += 500;
     }
+    return score;
 };
 
 Pulldown.prototype.pop = function() {
@@ -360,12 +366,19 @@ Cursor.prototype.draw = function(context) {
         var y = Math.min(Math.max(this.pulldown.matches[0].rect.y,
                     GAME_AREA.y + 20),
                 GAME_AREA.y + GAME_AREA.height);
+        var text = this.pulldown.matches.length + '(' +
+            this.pulldown.getScore() + ')';
+
         context.fillStyle = 'rgb(0, 0, 0)';
-        context.font = 'bold 33px Arial';
-        context.fillText(this.pulldown.matches.length, x, y);
+        context.font = 'bold 34px monospace';
+        var i;
+        for (i = 0; i < text.length; i++) {
+            context.fillText(text[i], x + 17 * i, y);
+        }
+
         context.fillStyle = 'rgb(255, 255, 255)';
-        context.font = 'bold 28px Arial';
-        context.fillText(this.pulldown.matches.length, x + 1, y - 2);
+        context.font = 'bold 28px monospace';
+        context.fillText(text, x + 1, y - 2);
     }
 };
 
