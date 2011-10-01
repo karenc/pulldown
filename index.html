@@ -1,0 +1,120 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, height=device-height, target-densityDpi=device-dpi, user-scalable=no" />
+        <title>Pulldown!</title>
+        <style type="text/css">
+            body {
+                font-size: 30px;
+                margin: 0;
+                border: 0;
+                padding: 0;
+            }
+            form {
+                display: block;
+            }
+            #background {
+                margin: 0 auto;
+                width: 300px;
+                padding: 10px;
+                background-image: url('background.jpg');
+                background-color: rgba(100, 200, 100, 0.5);
+            }
+            .field {
+                margin-left: 70px;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            function getCookies() {
+                var i;
+                console.log(document.cookie);
+                var cookies = document.cookie.split(/;\s*/);
+                console.log(cookies);
+                var result = {};
+                var split;
+                for (i = 0; i < cookies.length; i++) {
+                    console.log(cookies[i]);
+                    split = cookies[i].split('=');
+                    console.log(split);
+                    result[split[0]] = split[1];
+                    console.log(result);
+                }
+                return result;
+            }
+            if (!location.href.match(/redirect=no/)) {
+                var cookies = getCookies();
+                if (cookies['size'] in {
+                        '600.html': '', '800.html': '', '480.html': ''}) {
+                    location.href = cookies['size'];
+                }
+            }
+        </script>
+        <div id="background">
+            <form action="" method="post">
+                <div class="field">
+                    <label>Screen size:</label>
+                    <div>
+                        <input name="size" type="radio" value="600.html" id="600" />
+                        <label for="600">1024x600</label>
+                    </div>
+                    <div>
+                        <input name="size" type="radio" value="800.html" id="800" />
+                        <label for="800">800x480</label>
+                    </div>
+                    <div>
+                        <input name="size" type="radio" value="480.html" id="480" />
+                        <label for="480">480x320</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="difficulty">Difficulty:</label>
+                    <div>
+                        <input name="difficulty" type="radio" value="normal" id="normal" checked="checked" />
+                        <label for="normal">Normal</label>
+                    </div>
+                    <div>
+                        <input name="difficulty" type="radio" value="advanced" id="advanced" />
+                        <label for="advanced">Advanced</label>
+                    </div>
+                </div>
+                <div>
+                    <input type="submit" value="Play!" style="width: 300px; font-size: 20px; padding: 5px" />
+                </div>
+            </form>
+        </div>
+        <script type="text/javascript">
+            var size = Math.max(screen.width, screen.height);
+            var screenSize;
+            if (size >= 1024) {
+                document.getElementById('600').checked = 'checked';
+                screenSize = '600.html';
+            } else if (size >= 800) {
+                document.getElementById('800').checked = 'checked';
+                screenSize = '800.html';
+            } else {
+                document.getElementById('480').checked = 'checked';
+                screenSize = '480.html';
+            }
+            var difficulty = 'normal';
+            document.forms[0].addEventListener('submit', function(e) {
+                e.preventDefault();
+                var inputs = document.getElementsByTagName('input');
+                var i;
+                for (i = 0; i < inputs.length; i++) {
+                    if (inputs[i].name == 'size' && inputs[i].checked) {
+                        screenSize = inputs[i].value;
+                    } else if (inputs[i].name == 'difficulty' && inputs[i].checked) {
+                        difficulty = inputs[i].value;
+                    }
+                }
+                var expire = new Date();
+                expire.setDate(expire.getDate() + 365);
+                document.cookie = 'size=' + screenSize + ';expires=' + expire.toUTCString();
+                document.cookie = 'difficulty=' + difficulty + ';expires=' + expire.toUTCString();
+                location.href = screenSize;
+            }, false);
+        </script>
+    </body>
+</html>

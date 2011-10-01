@@ -120,12 +120,13 @@ function BubbleType(image) {
     this.image = image;
 }
 
-function Pulldown(gameField, width, height, context, gameLayer) {
+function Pulldown(gameField, width, height, context, gameLayer, difficulty) {
     this.gameField = gameField;
     this.width = width;
     this.height = height;
     this.context = context;
     this.gameLayer = gameLayer;
+    this.difficulty = difficulty;
 
     this.score = 0;
     this.finished = false;
@@ -140,22 +141,44 @@ function Pulldown(gameField, width, height, context, gameLayer) {
 }
 
 Pulldown.prototype.nextTargetScore = function() {
-    if (this.level <= 2) {
-        this.target += 2000;
-    } else if (this.level >= 3 && this.level <= 5) {
-        this.target += 3000;
-    } else if (this.level >= 6 && this.level <= 8) {
-        this.target += 4000;
-    } else if (this.level >= 9 && this.level <= 13) {
-        this.target += 5000;
-    } else if (this.level >= 14 && this.level <= 31) {
-        this.target += 5500;
-    } else if (this.level >= 32 && this.level <= 63) {
-        this.target += 6000;
-    } else if (this.level >= 64 && this.level <= 95) {
-        this.target += 6500;
+    if (this.difficulty == 'advanced') {
+        if (this.level <= 2) {
+            this.target += 2000;
+        } else if (this.level >= 3 && this.level <= 5) {
+            this.target += 3000;
+        } else if (this.level >= 6 && this.level <= 8) {
+            this.target += 4000;
+        } else if (this.level >= 9 && this.level <= 13) {
+            this.target += 5000;
+        } else if (this.level >= 14 && this.level <= 18) {
+            this.target += 5500;
+        } else if (this.level >= 19 && this.level <= 23) {
+            this.target += 6000;
+        } else if (this.level >= 24 && this.level <= 33) {
+            this.target += 6500;
+        } else if (this.level >= 34 && this.level <= 43) {
+            this.target += 7000;
+        } else {
+            this.target += 7500;
+        }
     } else {
-        this.target += 7000;
+        if (this.level <= 2) {
+            this.target += 2000;
+        } else if (this.level >= 3 && this.level <= 5) {
+            this.target += 3000;
+        } else if (this.level >= 6 && this.level <= 8) {
+            this.target += 4000;
+        } else if (this.level >= 9 && this.level <= 13) {
+            this.target += 5000;
+        } else if (this.level >= 14 && this.level <= 31) {
+            this.target += 5500;
+        } else if (this.level >= 32 && this.level <= 63) {
+            this.target += 6000;
+        } else if (this.level >= 64 && this.level <= 95) {
+            this.target += 6500;
+        } else {
+            this.target += 7000;
+        }
     }
 };
 
@@ -532,6 +555,10 @@ Pulldown.prototype.newGame = function() {
 
 };
 
+function getDifficulty() {
+    return document.cookie.match(/difficulty=([^;]*)/)[1];
+}
+
 function init() {
     BubbleType.red = new BubbleType(document.getElementById('red'));
     BubbleType.turquoise = new BubbleType(document.getElementById('turquoise'));
@@ -555,7 +582,7 @@ function init() {
     var topLayer = new Layer();
 
     var pulldown = new Pulldown([], GAME_WIDTH, GAME_HEIGHT, context,
-            gameLayer);
+            gameLayer, getDifficulty());
 
     allowClick = false;
 
