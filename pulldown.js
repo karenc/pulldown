@@ -395,13 +395,15 @@ Score.prototype.draw = function(context) {
             SCORE_AREA.height);
     context.fillStyle = 'rgb(0, 0, 0)';
     context.font = 'bold 20px Arial';
-    context.fillText('Score', SCORE_AREA.x + 10, SCORE_AREA.y + 30);
+    context.fillText('Score', SCORE_AREA.x + 10,
+            SCORE_AREA.y + SCORE_AREA.height / 2 + 8);
 
     context.font = 'bold 40px Arial';
     context.fillStyle = 'rgb(0, 0, 0)';
     var score = this.pulldown.score.toString();
-    context.fillText(score, SCORE_AREA.x + (16 - score.length) * 20,
-            SCORE_AREA.y + 40);
+    context.fillText(score,
+            SCORE_AREA.x + SCORE_AREA.width - (score.length + 1) * 22,
+            SCORE_AREA.y + SCORE_AREA.height / 2 + 15);
 };
 
 Score.prototype.hit = function(point) {
@@ -417,7 +419,8 @@ Target.prototype.draw = function(context) {
             TARGET_AREA.height);
     context.fillStyle = 'rgb(0, 0, 0)';
     context.font = 'bold 20px Arial';
-    context.fillText('Target', TARGET_AREA.x + 10, TARGET_AREA.y + 30);
+    context.fillText('Target', TARGET_AREA.x + 10,
+            TARGET_AREA.y + TARGET_AREA.height / 2 + 8);
 
     context.font = 'bold 40px Arial';
     if (this.pulldown.score < this.pulldown.target) {
@@ -426,8 +429,9 @@ Target.prototype.draw = function(context) {
         context.fillStyle = 'rgb(0, 0, 0)';
     }
     var target = this.pulldown.target.toString();
-    context.fillText(target, TARGET_AREA.x + (16 - target.length) * 20,
-            TARGET_AREA.y + 40);
+    context.fillText(target,
+            TARGET_AREA.x + TARGET_AREA.width - (1 + target.length) * 22,
+            TARGET_AREA.y + TARGET_AREA.height / 2 + 15);
 };
 
 Target.prototype.hit = function(point) {
@@ -447,14 +451,15 @@ Level.prototype.draw = function(context) {
             LEVEL_AREA.height);
     context.fillStyle = 'rgb(0, 0, 0)';
     context.font = 'bold 20px Arial';
-    context.fillText('Level', LEVEL_AREA.x + 10, LEVEL_AREA.y + 30);
+    context.fillText('Level', LEVEL_AREA.x + 10,
+            LEVEL_AREA.y + LEVEL_AREA.height / 2 + 8);
 
     context.font = 'bold 40px Arial';
     context.fillStyle = 'rgb(0, 0, 0)';
     var level = this.pulldown.level.toString();
     context.fillText(level,
-            LEVEL_AREA.x + (16 - level.length) * 20,
-            LEVEL_AREA.y + 40);
+            LEVEL_AREA.x + LEVEL_AREA.width - (1 + level.length) * 22,
+            LEVEL_AREA.y + LEVEL_AREA.height / 2 + 15);
 };
 
 Level.prototype.hit = function(context) {

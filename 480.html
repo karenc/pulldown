@@ -1,0 +1,52 @@
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, height=device-height, target-densityDpi=device-dpi, user-scalable=no" />
+        <title>Pulldown!</title>
+        <script type="text/javascript" src="utils.js"></script>
+        <script type="text/javascript" src="pulldown.js"></script>
+        <style type="text/css">
+            body {
+                margin: 0;
+                border: 0;
+                padding: 0;
+            }
+            canvas {
+                margin: 0 auto;
+                display: block;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            }
+            #back-buffer {
+                display: none;
+            }
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
+    <body onload="init()">
+        <canvas id="game" width="320" height="480"></canvas>
+        <canvas id="back-buffer" width="320" height="480"></canvas>
+        <img id="background" class="hidden" src="background480.jpg" />
+
+        <img id="red" class="hidden" src="red32.gif" />
+        <img id="turquoise" class="hidden" src="turquoise32.gif" />
+        <img id="green" class="hidden" src="green32.gif" />
+        <img id="black" class="hidden" src="black32.gif" />
+        <img id="yellow" class="hidden" src="yellow32.gif" />
+        <img id="purple" class="hidden" src="purple32.gif" />
+
+        <script type="text/javascript">
+            BUBBLE_SIZE = 32;
+            var GAME_AREA = new Rect(0, 0,
+                    BUBBLE_SIZE * GAME_WIDTH, BUBBLE_SIZE * GAME_HEIGHT);
+            var SCORE_AREA = new Rect(GAME_AREA.x, GAME_AREA.y + GAME_AREA.height,
+                    GAME_AREA.width, 32);
+            var TARGET_AREA = new Rect(GAME_AREA.x, SCORE_AREA.y + SCORE_AREA.height,
+                    GAME_AREA.width, 32);
+            var LEVEL_AREA = new Rect(GAME_AREA.x, TARGET_AREA.y + TARGET_AREA.height,
+                    GAME_AREA.width, 32);
+            var SCORE_BACKGROUND = 'rgba(50, 200, 30, 0.5)';
+        </script>
+    </body>
+</html>
