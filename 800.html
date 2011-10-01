@@ -2,12 +2,6 @@
     <head>
         <meta name="viewport" content="width=device-width, height=device-height, target-densityDpi=device-dpi, user-scalable=no" />
         <title>Pulldown!</title>
-        <script type="text/javascript">
-            if ((window.innerWidth > window.innerHeight) &&
-                    !location.href.match(/'?redirect=no'/)) {
-                window.location.href = 'index.html';
-            }
-        </script>
         <script type="text/javascript" src="utils.js"></script>
         <script type="text/javascript" src="pulldown.js"></script>
         <style type="text/css">
@@ -45,11 +39,11 @@
             var GAME_AREA = new Rect(((480 - BUBBLE_SIZE * GAME_WIDTH) / 2), 0,
                     BUBBLE_SIZE * GAME_WIDTH, BUBBLE_SIZE * GAME_HEIGHT);
             var SCORE_AREA = new Rect(GAME_AREA.x - 5, GAME_AREA.y + GAME_AREA.height + 10,
-                    GAME_AREA.width + 10, 50);
+                    GAME_AREA.width + 5, 50);
             var TARGET_AREA = new Rect(GAME_AREA.x - 5, SCORE_AREA.y + SCORE_AREA.height + 5,
-                    GAME_AREA.width + 10, 50);
+                    GAME_AREA.width + 5, 50);
             var LEVEL_AREA = new Rect(GAME_AREA.x - 5, TARGET_AREA.y + TARGET_AREA.height + 5,
-                    GAME_AREA.width + 10, 50);
+                    GAME_AREA.width + 5, 50);
             var SCORE_BACKGROUND = 'rgba(50, 200, 30, 0.5)';
         </script>
     </body>
