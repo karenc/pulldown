@@ -556,7 +556,11 @@ Pulldown.prototype.newGame = function() {
 };
 
 function getDifficulty() {
-    return document.cookie.match(/difficulty=([^;]*)/)[1];
+    var match = document.cookie.match(/difficulty=([^;]*)/);
+    if (match) {
+        return match[1];
+    }
+    return 'normal';
 }
 
 function init() {
