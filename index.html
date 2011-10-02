@@ -87,15 +87,15 @@
         <script type="text/javascript">
             var size = Math.max(screen.width, screen.height);
             var screenSize;
-            if (size >= 1024) {
-                document.getElementById('600').checked = 'checked';
-                screenSize = '600.html';
-            } else if (size >= 800) {
+            if (size <= 480) {
+                document.getElementById('480').checked = 'checked';
+                screenSize = '480.html';
+            } else if (size <= 800) {
                 document.getElementById('800').checked = 'checked';
                 screenSize = '800.html';
             } else {
-                document.getElementById('480').checked = 'checked';
-                screenSize = '480.html';
+                document.getElementById('600').checked = 'checked';
+                screenSize = '600.html';
             }
             var difficulty = 'normal';
             document.forms[0].addEventListener('submit', function(e) {
