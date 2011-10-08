@@ -29,17 +29,12 @@
         <script type="text/javascript">
             function getCookies() {
                 var i;
-                console.log(document.cookie);
                 var cookies = document.cookie.split(/;\s*/);
-                console.log(cookies);
                 var result = {};
                 var split;
                 for (i = 0; i < cookies.length; i++) {
-                    console.log(cookies[i]);
                     split = cookies[i].split('=');
-                    console.log(split);
                     result[split[0]] = split[1];
-                    console.log(result);
                 }
                 return result;
             }
