@@ -42,8 +42,8 @@
         </style>
     </head>
     <body onload="init()">
-        <canvas id="game" height="1024" width="600"></canvas>
-        <canvas id="back-buffer" height="1024" width="600"></canvas>
+        <canvas id="game" height="1000" width="600"></canvas>
+        <canvas id="back-buffer" height="1000" width="600"></canvas>
         <img id="background" class="hidden" src="background1024.jpg" />
 
         <img id="red" class="hidden" src="red60.gif" />
@@ -54,6 +54,10 @@
         <img id="purple" class="hidden" src="purple60.gif" />
 
         <script type="text/javascript">
+            DROP_SPEED = 0.7;
+            DROP_INTERVAL = 70;
+            POP_SPEED = 7;
+            GRAVITY_SPEED = 0.1;
             BUBBLE_SIZE = 60;
             var GAME_AREA = new Rect(0, 0,
                     BUBBLE_SIZE * GAME_WIDTH, BUBBLE_SIZE * GAME_HEIGHT);
