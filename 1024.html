@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, height=device-height, target-densityDpi=device-dpi, user-scalable=no" />
+        <title>Pulldown!</title>
+        <script type="text/javascript" src="utils.js"></script>
+        <script type="text/javascript" src="pulldown.js"></script>
+        <style type="text/css">
+            body {
+                margin: 0;
+                border: 0;
+                padding: 0;
+            }
+            canvas {
+                margin: 0 auto;
+                display: block;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            }
+            #back-buffer {
+                display: none;
+            }
+            .hidden {
+                display: none;
+            }
+            #menu {
+                width: 600px;
+                margin: 0 auto;
+            }
+            #save,
+            #new,
+            #settings {
+                width: 200px;
+                display: block;
+                float: left;
+                margin: 0 auto;
+                padding: 15px 0;
+                text-align: center;
+                font-size: 25px;
+                text-decoration: none;
+                font-weight: bold;
+                color: #408840;
+            }
+        </style>
+    </head>
+    <body onload="init()">
+        <canvas id="game" height="1024" width="600"></canvas>
+        <canvas id="back-buffer" height="1024" width="600"></canvas>
+        <img id="background" class="hidden" src="background1024.jpg" />
+
+        <img id="red" class="hidden" src="red60.gif" />
+        <img id="turquoise" class="hidden" src="turquoise60.gif" />
+        <img id="green" class="hidden" src="green60.gif" />
+        <img id="black" class="hidden" src="black60.gif" />
+        <img id="yellow" class="hidden" src="yellow60.gif" />
+        <img id="purple" class="hidden" src="purple60.gif" />
+
+        <script type="text/javascript">
+            BUBBLE_SIZE = 60;
+            var GAME_AREA = new Rect(0, 0,
+                    BUBBLE_SIZE * GAME_WIDTH, BUBBLE_SIZE * GAME_HEIGHT);
+            var SCORE_AREA = new Rect(GAME_AREA.x, GAME_AREA.y +
+                    GAME_AREA.height + 10, GAME_AREA.width, 50);
+            var TARGET_AREA = new Rect(GAME_AREA.x, SCORE_AREA.y +
+                    SCORE_AREA.height + 5, GAME_AREA.width, 50);
+            var LEVEL_AREA = new Rect(GAME_AREA.x, TARGET_AREA.y +
+                    TARGET_AREA.height + 5, GAME_AREA.width, 50);
+            var SCORE_BACKGROUND = 'rgba(100, 255, 100, 0.5)';
+        </script>
+        <div id="menu">
+            <a id="save" href="#">Save game</a>
+            <a id="new" href="#">New game</a>
+            <a id="settings" href="index.html?redirect=no">Settings</a>
+            <div style="clear: both;"></div>
+        </div>
+    </body>
+</html>

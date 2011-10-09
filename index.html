@@ -40,8 +40,8 @@
             }
             if (!location.href.match(/redirect=no/)) {
                 var cookies = getCookies();
-                if (cookies['size'] in {
-                        '600.html': '', '800.html': '', '480.html': ''}) {
+                if (cookies['size'] in {'600.html': '', '800.html': '',
+                        '480.html': '', '1024.html': ''}) {
                     location.href = cookies['size'];
                 }
             }
@@ -52,7 +52,11 @@
                     <label>Screen size:</label>
                     <div>
                         <input name="size" type="radio" value="600.html" id="600" />
-                        <label for="600">1024x600</label>
+                        <label for="600">1024x600 (landscape)</label>
+                    </div>
+                    <div>
+                        <input name="size" type="radio" value="1024.html" id="1024" />
+                        <label for="1024">1024x600 (portrait)</label>
                     </div>
                     <div>
                         <input name="size" type="radio" value="800.html" id="800" />
