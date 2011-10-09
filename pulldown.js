@@ -364,9 +364,11 @@ Pulldown.prototype.gravity = function() {
 Pulldown.prototype.isFinished = function() {
     var i;
     var j;
+    var empty = true;
     for (i = 0; i < this.gameField.length; i++) {
         for (j = 0; j < this.gameField[i].length; j++) {
             if (this.gameField[i][j] !== null && !this.gameField[i][j].dead) {
+                empty = false;
                 this.floodFill(i, j, this.gameField[i][j]);
                 if (this.matches.length >= MINIMUM_MATCH) {
                     this.finished = false;
@@ -379,6 +381,9 @@ Pulldown.prototype.isFinished = function() {
     }
     this.finished = true;
     this.clearMatches();
+    if (empty) {
+        this.score += 10000;
+    }
     return;
 };
 
@@ -649,7 +654,7 @@ Pulldown.prototype.load = function() {
         }
         for (j = 0; j < inner.length; j++) {
             type = parseInt(inner[j]);
-            if (isNaN(type) || type >= BubbleType.bubbleTypes) {
+            if (isNaN(type) || type >= BubbleType.bubbleTypes.length) {
                 bubble = randomBubble(i, GAME_HEIGHT - j - 1);
             } else {
                 bubble = new Bubble(new Point(GAME_AREA.x + BUBBLE_SIZE * i,
