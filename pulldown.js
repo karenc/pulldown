@@ -533,6 +533,7 @@ Pulldown.prototype.nextLevel = function() {
     this.gameLayer.gameObjects = [];
     this.finished = false;
     this.newGame();
+    this.save();
 };
 
 Pulldown.prototype.newGame = function() {
