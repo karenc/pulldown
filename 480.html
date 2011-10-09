@@ -42,8 +42,8 @@
         </style>
     </head>
     <body onload="init()">
-        <canvas id="game" width="320" height="480"></canvas>
-        <canvas id="back-buffer" width="320" height="480"></canvas>
+        <canvas id="game" width="320" height="515"></canvas>
+        <canvas id="back-buffer" width="320" height="515"></canvas>
         <img id="background" class="hidden" src="background480.jpg" />
 
         <img id="red" class="hidden" src="red32.gif" />
@@ -62,6 +62,8 @@
             var TARGET_AREA = new Rect(GAME_AREA.x, SCORE_AREA.y + SCORE_AREA.height,
                     GAME_AREA.width, 32);
             var LEVEL_AREA = new Rect(GAME_AREA.x, TARGET_AREA.y + TARGET_AREA.height,
+                    GAME_AREA.width, 32);
+            var HIGHSCORE_AREA = new Rect(GAME_AREA.x, LEVEL_AREA.y + LEVEL_AREA.height,
                     GAME_AREA.width, 32);
             var SCORE_BACKGROUND = 'rgba(50, 200, 30, 0.5)';
         </script>

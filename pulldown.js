@@ -537,6 +537,49 @@ GameFinished.prototype.hit = function(point) {
     }
 };
 
+function HighScore(pulldown) {
+    this.highscore = 0;
+    var highscore = document.cookie.match(/highscore=([^;]*)/);
+    if (highscore) {
+        this.highscore = parseInt(highscore[1]);
+    }
+    if (isNaN(this.highscore)) {
+        this.highscore = 0;
+    }
+    this.pulldown = pulldown;
+}
+
+HighScore.prototype.update = function() {
+    if (this.pulldown.score > this.highscore) {
+        var expire = new Date();
+        expire.setDate(expire.getDate() + 365);
+        this.highscore = this.pulldown.score;
+        document.cookie = 'highscore=' + this.highscore + ';expires=' +
+            expire.toUTCString();
+    }
+};
+
+HighScore.prototype.draw = function(context) {
+    this.update();
+    context.fillStyle = SCORE_BACKGROUND;
+    context.fillRect(HIGHSCORE_AREA.x, HIGHSCORE_AREA.y,
+            HIGHSCORE_AREA.width, HIGHSCORE_AREA.height);
+    context.fillStyle = 'rgb(0, 0, 0)';
+    context.font = 'bold 20px Arial';
+    context.fillText('High Score', HIGHSCORE_AREA.x + 10,
+            HIGHSCORE_AREA.y + HIGHSCORE_AREA.height / 2 + 8);
+
+    context.font = 'bold 40px Arial';
+    var highscore = this.highscore.toString();
+    context.fillText(highscore,
+            HIGHSCORE_AREA.x + HIGHSCORE_AREA.width - (
+                1 + highscore.length) * 22,
+            HIGHSCORE_AREA.y + HIGHSCORE_AREA.height / 2 + 15);
+};
+
+HighScore.prototype.hit = function() {
+};
+
 Pulldown.prototype.nextLevel = function() {
     this.level++;
     this.nextTargetScore();
@@ -619,7 +662,7 @@ Pulldown.prototype.save = function() {
 };
 
 function getCookie(key) {
-    var match = document.cookie.match(new RegExp(key + '=([^;]*)'));
+    var match = document.cookie.match(new RegExp('\\b' + key + '=([^;]*)'));
     if (match) {
         return match[1];
     }
@@ -777,6 +820,7 @@ function init() {
     topLayer.addGameObject(new Target(pulldown));
     topLayer.addGameObject(new Level(pulldown));
     topLayer.addGameObject(new GameFinished(pulldown));
+    topLayer.addGameObject(new HighScore(pulldown));
 
     redraw();
 
