@@ -219,6 +219,9 @@ Pulldown.prototype.getScore = function() {
     if (this.matches.length >= 20) {
         score += 500;
     }
+    if (this.matches.length >= 30) {
+        score += 500;
+    }
     return score;
 };
 
