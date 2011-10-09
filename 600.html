@@ -21,9 +21,16 @@
             .hidden {
                 display: none;
             }
-            #settings {
+            #menu {
                 width: 1024px;
+                margin: 0 auto;
+            }
+            #save,
+            #new,
+            #settings {
+                width: 340px;
                 display: block;
+                float: left;
                 margin: 0 auto;
                 padding: 15px 0;
                 text-align: center;
@@ -57,6 +64,11 @@
                     450, 50);
             var SCORE_BACKGROUND = 'rgba(100, 255, 100, 0.5)';
         </script>
-        <a id="settings" href="index.html?redirect=no">Settings</a>
+        <div id="menu">
+            <a id="save" href="#">Save game</a>
+            <a id="new" href="#">New game</a>
+            <a id="settings" href="index.html?redirect=no">Settings</a>
+            <div style="clear: both;"></div>
+        </div>
     </body>
 </html>

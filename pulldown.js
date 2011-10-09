@@ -12,6 +12,7 @@ var MINIMUM_MATCH = 3;
 var tickManager;
 
 var allowClick = true;
+var dontsave = false;
 
 function Bubble(position, type) {
     this.rect = new Rect(position.x, position.y, BUBBLE_SIZE, BUBBLE_SIZE);
@@ -511,6 +512,7 @@ GameFinished.prototype.draw = function(context) {
             text = 'NEXT LEVEL';
         } else {
             text = 'GAME OVER';
+            this.pulldown.removeSave();
         }
         context.fillText(text, GAME_AREA.x + (GAME_AREA.width / 2 - 120),
                 GAME_AREA.y + GAME_AREA.height / 2);
@@ -567,7 +569,20 @@ Pulldown.prototype.newGame = function() {
 
 };
 
+Pulldown.prototype.removeSave = function() {
+    var expire = new Date();
+    expire.setDate(expire.getDate() - 1);
+
+    var states = ['level', 'target', 'score', 'game'];
+    var i;
+    for (i = 0; i < states.length; i++) {
+        document.cookie = states[i] + '=a;expires=' + expire.toUTCString();
+    }
+    dontsave = true;
+}
+
 Pulldown.prototype.save = function() {
+    dontsave = false;
     var expire = new Date();
     expire.setDate(expire.getDate() + 365);
 
@@ -738,6 +753,17 @@ function init() {
         pulldown.newGame(gameLayer);
     }
 
+    document.getElementById('new').addEventListener('click', function(e) {
+        e.preventDefault();
+        pulldown.removeSave();
+        location.href = location.href;
+    });
+
+    document.getElementById('save').addEventListener('click', function(e) {
+        e.preventDefault();
+        pulldown.save();
+    });
+
     topLayer.addGameObject(new Cursor(pulldown));
     topLayer.addGameObject(new Score(pulldown));
     topLayer.addGameObject(new Target(pulldown));
@@ -752,6 +778,9 @@ function init() {
     }
 
     window.onbeforeunload = function(e) {
+        if (dontsave) {
+            return;
+        }
         pulldown.save();
         return '';
     };
