@@ -23,6 +23,17 @@ function Bubble(position, type) {
     this.dy = 0;
 }
 
+Bubble.prototype.getTypeIndex = function() {
+    var type;
+    var i;
+    for (i = 0; i < BubbleType.bubbleTypes.length; i++) {
+        if (BubbleType.bubbleTypes[i].image.src === this.type.image.src) {
+            type = i;
+            return type;
+        }
+    }
+};
+
 Bubble.prototype.draw = function(context) {
     if (this.match) {
         context.fillStyle = 'rgb(170, 255, 170)';
@@ -555,13 +566,102 @@ Pulldown.prototype.newGame = function() {
 
 };
 
+Pulldown.prototype.save = function() {
+    var expire = new Date();
+    expire.setDate(expire.getDate() + 365);
+
+    var states = ['level', 'target', 'score'];
+    var i;
+    for (i = 0; i < states.length; i++) {
+        document.cookie = states[i] + '=' + this[states[i]] + ';expires=' +
+            expire.toUTCString();
+    }
+    var game = [];
+    var i;
+    var j;
+    var s;
+    var bubble;
+    for (i = 0; i < this.gameField.length; i++) {
+        s = [];
+        for (j = this.gameField[i].length - 1; j >= 0; j--) {
+            bubble = this.gameField[i][j];
+            if (bubble !== null && !bubble.dead) {
+                s.push(bubble.getTypeIndex().toString());
+            }
+        }
+        game.push(s.join(','));
+    }
+    document.cookie = 'game=' + game.join('|') + ';expires=' + expire.toUTCString();
+};
+
+function getCookie(key) {
+    var match = document.cookie.match(new RegExp(key + '=([^;]*)'));
+    if (match) {
+        return match[1];
+    }
+}
+
+Pulldown.prototype.load = function() {
+    var score = parseInt(getCookie('score'));
+    var target = parseInt(getCookie('target'));
+    var level = parseInt(getCookie('level'));
+    var game = getCookie('game');
+
+    if (isNaN(score) || isNaN(target) || isNaN(level)) {
+        return false;
+    }
+
+    this.score = score;
+    this.target = target;
+    this.level = level;
+
+    var i;
+    var j;
+    var splits = game.split('|');
+    var inner;
+    var bubble;
+    var type;
+
+    for (i = 0; i < splits.length; i++) {
+        if (splits[i] === "") {
+            inner = [];
+        } else {
+            inner = splits[i].split(',');
+        }
+        for (j = 0; j < inner.length; j++) {
+            type = parseInt(inner[j]);
+            if (isNaN(type) || type >= BubbleType.bubbleTypes) {
+                bubble = randomBubble(i, GAME_HEIGHT - j - 1);
+            } else {
+                bubble = new Bubble(new Point(GAME_AREA.x + BUBBLE_SIZE * i,
+                            GAME_AREA.y + BUBBLE_SIZE * (GAME_HEIGHT - j - 1)),
+                            BubbleType.bubbleTypes[type]);
+            }
+            this.addBubble(i, GAME_HEIGHT - j - 1, bubble);
+            this.gameLayer.addGameObject(bubble);
+        }
+        for (j = inner.length; j < GAME_HEIGHT; j++) {
+            this.gameField[i][GAME_HEIGHT - j - 1] = null;
+        }
+    }
+    for (i = splits.length; i < GAME_WIDTH; i++) {
+        for (j = 0; j < GAME_WIDTH; j++) {
+            this.gameField[i][j] = null;
+        }
+    }
+    this.isFinished();
+    allowClick = true;
+
+    return true;
+};
+
 function getDifficulty() {
     var match = document.cookie.match(/difficulty=([^;]*)/);
     if (match) {
         return match[1];
     }
     return 'normal';
-}
+};
 
 function init() {
     BubbleType.red = new BubbleType(document.getElementById('red'));
@@ -633,7 +733,9 @@ function init() {
                 }, false);
     }
 
-    pulldown.newGame(gameLayer);
+    if (!pulldown.load()) {
+        pulldown.newGame(gameLayer);
+    }
 
     topLayer.addGameObject(new Cursor(pulldown));
     topLayer.addGameObject(new Score(pulldown));
@@ -649,6 +751,7 @@ function init() {
     }
 
     window.onbeforeunload = function(e) {
+        pulldown.save();
         return '';
     };
 }
