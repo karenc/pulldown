@@ -12,7 +12,6 @@ var MINIMUM_MATCH = 3;
 var tickManager;
 
 var allowClick = true;
-var dontsave = false;
 
 function Bubble(position, type) {
     this.rect = new Rect(position.x, position.y, BUBBLE_SIZE, BUBBLE_SIZE);
@@ -629,11 +628,9 @@ Pulldown.prototype.removeSave = function() {
     for (i = 0; i < states.length; i++) {
         document.cookie = states[i] + '=a;expires=' + expire.toUTCString();
     }
-    dontsave = true;
 }
 
 Pulldown.prototype.save = function() {
-    dontsave = false;
     var expire = new Date();
     expire.setDate(expire.getDate() + 365);
 
@@ -828,12 +825,4 @@ function init() {
     if (navigator.userAgent.match(/Android/)) {
         window.scrollTo(0, 1);
     }
-
-    window.onbeforeunload = function(e) {
-        if (dontsave) {
-            return;
-        }
-        pulldown.save();
-        return '';
-    };
 }
