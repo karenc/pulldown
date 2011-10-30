@@ -363,11 +363,11 @@ Pulldown.prototype.gravity = function() {
 Pulldown.prototype.isFinished = function() {
     var i;
     var j;
-    var empty = true;
+    var number_left = 0;
     for (i = 0; i < this.gameField.length; i++) {
         for (j = 0; j < this.gameField[i].length; j++) {
             if (this.gameField[i][j] !== null && !this.gameField[i][j].dead) {
-                empty = false;
+                number_left++;
                 this.floodFill(i, j, this.gameField[i][j]);
                 if (this.matches.length >= MINIMUM_MATCH) {
                     this.finished = false;
@@ -380,8 +380,14 @@ Pulldown.prototype.isFinished = function() {
     }
     this.finished = true;
     this.clearMatches();
-    if (empty) {
+    if (number_left == 0) {
         this.score += 10000;
+    } else if (number_left == 1) {
+        this.score += 5000;
+    } else if (number_left == 2) {
+        this.score += 3000;
+    } else if (number_left == 3) {
+        this.score += 1000;
     }
     return;
 };
