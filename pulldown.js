@@ -811,12 +811,12 @@ function init() {
         e.preventDefault();
         pulldown.removeSave();
         location.href = location.href;
-    });
+    }, false);
 
     document.getElementById('save').addEventListener('click', function(e) {
         e.preventDefault();
         pulldown.save();
-    });
+    }, false);
 
     topLayer.addGameObject(new Cursor(pulldown));
     topLayer.addGameObject(new Score(pulldown));
