@@ -809,6 +809,9 @@ function init() {
 
     document.getElementById('new').addEventListener('click', function(e) {
         e.preventDefault();
+        if (!confirm('New game?')) {
+            return;
+        }
         pulldown.removeSave();
         location.href = location.href;
     }, false);
